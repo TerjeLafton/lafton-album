@@ -1,3 +1,3 @@
-module github.com/terjelafton/lafton-album
+module github.com/TerjeLafton/lafton-album
 
 go 1.16

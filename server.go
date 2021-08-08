@@ -39,8 +39,8 @@ func NewServer(store AlbumStore) *Server {
 	s.store = store
 
 	router := http.NewServeMux()
-	router.Handle("/albums", http.HandlerFunc(p.albumsHandler))
-	router.Handle("/albums/", http.HandlerFunc(p.albumHandler))
+	router.Handle("/albums", http.HandlerFunc(s.albumsHandler))
+	router.Handle("/albums/", http.HandlerFunc(s.albumHandler))
 
 	s.Handler = router
 

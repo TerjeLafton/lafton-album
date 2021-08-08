@@ -1,9 +1,9 @@
 package laftonalbum
 
 type Album struct {
-	name   string
-	artist string
-	year   int
+	Name   string
+	Artist string
+	Year   int
 }
 
 type AlbumStore struct {
@@ -12,15 +12,13 @@ type AlbumStore struct {
 
 func (a *AlbumStore) GetAlbums() []Album {
 	var albums []Album
-	for _, album := range a.store {
-		albums = append(albums, album)
-	}
+	albums = append(albums, a.store...)
 	return albums
 }
 
 func (a *AlbumStore) GetAlbum(name string) Album {
 	for _, album := range a.store {
-		if album.name == name {
+		if album.Name == name {
 			return album
 		}
 	}
