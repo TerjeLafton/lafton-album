@@ -50,7 +50,6 @@ func AlbumsHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(string(body))
 
 		var album Album
 		if err := json.Unmarshal(body, &album); err != nil {
