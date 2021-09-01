@@ -1,14 +1,8 @@
 package api
 
-type AlbumService interface {
-	New(album Album) error
-	GetAll() ([]Album, error)
-}
+type AlbumService interface{}
 
-type AlbumRepository interface {
-	NewAlbum(Album) error
-	GetAlbums() ([]Album, error)
-}
+type AlbumRepository interface{}
 
 type albumService struct {
 	storage AlbumRepository

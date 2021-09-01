@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"github.com/terjelafton/lafton-album/pkg/api"
 	"github.com/terjelafton/lafton-album/pkg/app"
 	"github.com/terjelafton/lafton-album/pkg/repository"
@@ -15,7 +13,8 @@ import (
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "this is the startup error: %s\\n", err)
+		fmt.Fprintf(os.Stderr, "Error starting server: %s\n", err)
+		os.Exit(1)
 	}
 }
 
@@ -26,27 +25,17 @@ func run() error {
 	}
 
 	storage := repository.NewStorage(db)
-	if err := storage.RunMigrations(); err != nil {
-		return err
-	}
-
-	router := gin.Default()
-	router.Use(cors.Default())
-
 	albumService := api.NewAlbumService(storage)
-
+	router := app.NewRouter()
 	server := app.NewServer(router, albumService)
 
-	err = server.Run()
-	if err != nil {
-		return err
-	}
+	server.Run(":8080")
 
 	return nil
 }
 
 func setupDatabase() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("album.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("AlbumRepository.db"), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

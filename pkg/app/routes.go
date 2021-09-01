@@ -1,16 +1,9 @@
 package app
 
-import "github.com/gin-gonic/gin"
-
-func (s *Server) Routes() *gin.Engine {
+func (s *Server) Routes() *Router {
 	router := s.router
 
-	v1 := router.Group("/v1/api")
-	{
-		v1.GET("/status", s.ApiStatus())
-		v1.POST("/albums", s.NewAlbum())
-		v1.GET("/albums", s.GetAlbums())
-	}
+	router.HandleFunc("GET", "/status", s.handleStatus())
 
 	return router
 }

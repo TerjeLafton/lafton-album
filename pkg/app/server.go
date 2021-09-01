@@ -2,32 +2,25 @@ package app
 
 import (
 	"log"
+	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/terjelafton/lafton-album/pkg/api"
 )
 
 type Server struct {
-	router       *gin.Engine
+	router       *Router
 	albumService api.AlbumService
 }
 
-func NewServer(router *gin.Engine, albumService api.AlbumService) *Server {
+func NewServer(router *Router, albumService api.AlbumService) *Server {
 	return &Server{
 		router:       router,
 		albumService: albumService,
 	}
 }
 
-func (s *Server) Run() error {
+func (s *Server) Run(addr string) {
 	r := s.Routes()
 
-	err := r.Run()
-
-	if err != nil {
-		log.Printf("Server- there was an error calling Run on router: %v", err)
-		return err
-	}
-
-	return nil
+	log.Fatal(http.ListenAndServe(addr, r))
 }
