@@ -1,3 +1,1 @@
-cmd/AlbumRepository.db
-.devcontainer/devcontainer.json
-.gitignore
+AlbumRepository.db
