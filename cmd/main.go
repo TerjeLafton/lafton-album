@@ -1,9 +1,10 @@
+// Package main instantiates all needed modules and starts the server.
 package main
 
 import (
-	"fmt"
-	"os"
+	"log"
 
+	"github.com/gin-gonic/gin"
 	"github.com/terjelafton/lafton-album/pkg/api"
 	"github.com/terjelafton/lafton-album/pkg/app"
 	"github.com/terjelafton/lafton-album/pkg/repository"
@@ -12,26 +13,25 @@ import (
 )
 
 func main() {
-	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error starting server: %s\n", err)
-		os.Exit(1)
-	}
-}
-
-func run() error {
 	db, err := setupDatabase()
 	if err != nil {
-		return err
+		log.Fatalf("Error setting up database: %v", err)
+	}
+
+	if err := db.AutoMigrate(&api.Album{}); err != nil {
+		log.Fatalf("Error running database migrations: %v", err)
 	}
 
 	storage := repository.NewStorage(db)
 	albumService := api.NewAlbumService(storage)
-	router := app.NewRouter()
+
+	router := gin.Default()
+
 	server := app.NewServer(router, albumService)
 
-	server.Run(":8080")
-
-	return nil
+	if err := server.Run(); err != nil {
+		log.Fatalf("Error running server: %v", err)
+	}
 }
 
 func setupDatabase() (*gorm.DB, error) {
